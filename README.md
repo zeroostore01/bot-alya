@@ -3,7 +3,7 @@
 </p>
 <h1 align="left">Alya Bot</h1>
 
-> Ubah di config.js
+> Ubah nomor owner, nama bot, nama session, dll di [`config.js`]
 
 </br>
 
