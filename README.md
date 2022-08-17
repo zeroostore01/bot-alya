@@ -3,7 +3,14 @@
 </p>
 <h1 align="left">Alya Bot</h1>
 
+> Original script dari [`Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
+
 > Ubah nomor owner, nama bot, nama session, dll di [`config.js`](https://github.com/alya-tok/bot-alya/blob/master/config.js)
+
+> Script ini support Termux, Heroku, Okteto, Rdp, Vps, Panel, Dll.
+
+> Script ini 100% gratis dan tidak dijual belikan. yg jual semoga Gabisa tidur.
+ 
 
 </br>
 
