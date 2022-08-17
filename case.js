@@ -1609,7 +1609,7 @@ break
                 let quality = args[1] ? args[1] : '128kbps'
                 let media = await yta(text, quality)
                 if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
-                ho = `*[ YOUTUBE MP3 ]*\n\n◦ Title : ${media.title}\n◦ File Size : ${media.filesizeF}\n◦ Url : ${isUrl(text)}\n◦ Ext : MP3\n◦ Resolusi : ${args[1] || '128kbps'}\n}n*Otw Kirim Bosku*`                
+                ho = `*[ YOUTUBE MP3 ]*\n\n◦ Title : ${media.title}\n◦ File Size : ${media.filesizeF}\n◦ Url : ${isUrl(text)}\n◦ Ext : MP3\n◦ Resolusi : ${args[1] || '128kbps'}\n\n*Otw Kirim Bosku*`                
                 ALYA.sendImage(m.chat, media.thumb, `${ho}`, m)
                 ALYA.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: m })
             }
@@ -2100,18 +2100,30 @@ break
 
 //────────────────────[ DOWNLOADER ]────────────────────
 
-            case 'tiktok': case 'tt': case 'tiktoknowm':{
-            if (!q) throw 'Masukkan Query Link!'
-            m.reply(mess.wait)
-            bochil.tiktokdlv3(q).then( data => {
-            ALYA.sendMessage(m.chat, {
-            video: { url: data.video.no_watermark },
-            caption: `Kamu bisa mengubahnya menjadi Audio, pencet tombol dibawah untuk mengubahnya!`,
-            buttons: [{buttonId: `${prefix}ttaudio ${q} ${m.sender}`, buttonText: { displayText: "Audio" }, type: 1 }],
-            footer: "Untuk Mengubah Ke Audio Gunakan Manual #tiktokaudio [link]"
-            }, { quoted: m })
-            })
-            }
+            case 'tiktok': case 'tt': case 'tiktoknowm':{
+
+            if (!q) throw 'Masukkan Query Link!'
+
+            m.reply(mess.wait)
+
+            bochil.tiktokdlv3(q).then( data => {
+
+            ALYA.sendMessage(m.chat, {
+
+            video: { url: data.video.no_watermark },
+
+            caption: `Kamu bisa mengubahnya menjadi Audio, pencet tombol dibawah untuk mengubahnya!`,
+
+            buttons: [{buttonId: `${prefix}ttaudio ${q} ${m.sender}`, buttonText: { displayText: "Audio" }, type: 1 }],
+
+            footer: "Untuk Mengubah Ke Audio Gunakan Manual #tiktokaudio [link]"
+
+            }, { quoted: m })
+
+            })
+
+            }
+
             break
 
             case 'ttaudio': case 'tiktokaudio':
