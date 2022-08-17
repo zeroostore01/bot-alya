@@ -2134,9 +2134,9 @@ break
                 if (!isUrl(args[0]) && !args[0].includes('instagram.com')) throw 'Link yang kamu berikan tidak.valid'
                 m.reply(mess.wait)
                 let urlnya = text
-	            hx.igdl(urlnya)
+	            bochil.instagramdlv3(urlnya)
 	            .then(async(result) => {
-		        for(let i of result.medias){
+		        for(let i of result){
 			    if(i.url.includes('mp4')){
 				let link = await getBuffer(i.url)
                 ALYA.sendMessage(m.chat, { video: link, }, { quoted: m })
