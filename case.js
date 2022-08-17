@@ -2659,7 +2659,7 @@ var te = 800
 var role= 'wariorrLV'
 var user = global.db.data.users[m.sender]
 try {
-ppuser = await hisoka.profilePictureUrl(m.sender, 'image')
+ppuser = await ALYA.profilePictureUrl(m.sender, 'image')
 } catch {
 ppuser = 'https://tinyurl.com/yx93l6da'
 }
