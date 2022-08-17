@@ -12,6 +12,7 @@ const yargs = require('yargs/yargs')
 const chalk = require('chalk')
 const FileType = require('file-type')
 const path = require('path')
+const _ = require('lodash')
 const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep } = require('./lib/myfunc')
@@ -37,7 +38,14 @@ global.db = new Low(
       new mongoDB(opts['db']) :
       new JSONFile(`src/database.json`)
 )
-global.db.data = {
+global.DATABASE = global.db // Backwards Compatibility
+global.loadDatabase = async function loadDatabase() {
+  if (global.db.READ) return new Promise((resolve) => setInterval(function () { (!global.db.READ ? (clearInterval(this), resolve(global.db.data == null ? global.loadDatabase() : global.db.data)) : null) }, 1 * 1000))
+  if (global.db.data !== null) return
+  global.db.READ = true
+  await global.db.read()
+  global.db.READ = false
+  global.db.data = {
     users: {},
     chats: {},
     database: {},
@@ -45,8 +53,12 @@ global.db.data = {
     settings: {},
     others: {},
     sticker: {},
+    anonymous: {},
     ...(global.db.data || {})
+  }
+  global.db.chain = _.chain(global.db.data)
 }
+loadDatabase()
 
 // save database every 30seconds
 if (global.db) setInterval(async () => {
@@ -83,8 +95,9 @@ async function startALYA() {
         if (mek.key && mek.key.remoteJid === 'status@broadcast') return
         if (!ALYA.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
         if (mek.key.id.startsWith('BAE5') && mek.key.id.length === 16) return
+        if (mek.key.id.startsWith('FatihArridho_')) return
         m = smsg(ALYA, mek, store)
-        require("./ALYA")(ALYA, m, chatUpdate, store)
+        require("./case")(ALYA, m, chatUpdate, store)
         } catch (err) {
             console.log(err)
         }
@@ -92,25 +105,31 @@ async function startALYA() {
     
     // Group Update
     ALYA.ev.on('groups.update', async pea => {
-       //console.log(pea)
+    //console.log(pea)
+    try {
+    for(let ciko of pea) {
     // Get Profile Picture Group
        try {
-       ppgc = await ALYA.profilePictureUrl(pea[0].id, 'image')
+       ppgc = await ALYA.profilePictureUrl(ciko.id, 'image')
        } catch {
-       ppgc = 'https://shortlink.ALYAarridho.my.id/rg1oT'
+       ppgc = 'https://tinyurl.com/yx93l6da'
        }
        let wm_fatih = { url : ppgc }
-       if (pea[0].announce == true) {
-       ALYA.send5ButImg(pea[0].id, `「 Group Settings Change 」\n\nGroup telah ditutup oleh admin, Sekarang hanya admin yang dapat mengirim pesan !`, `Group Settings Change Message`, wm_fatih, [])
-       } else if(pea[0].announce == false) {
-       ALYA.send5ButImg(pea[0].id, `「 Group Settings Change 」\n\nGroup telah dibuka oleh admin, Sekarang peserta dapat mengirim pesan !`, `Group Settings Change Message`, wm_fatih, [])
-       } else if (pea[0].restrict == true) {
-       ALYA.send5ButImg(pea[0].id, `「 Group Settings Change 」\n\nInfo group telah dibatasi, Sekarang hanya admin yang dapat mengedit info group !`, `Group Settings Change Message`, wm_fatih, [])
-       } else if (pea[0].restrict == false) {
-       ALYA.send5ButImg(pea[0].id, `「 Group Settings Change 」\n\nInfo group telah dibuka, Sekarang peserta dapat mengedit info group !`, `Group Settings Change Message`, wm_fatih, [])
+       if (ciko.announce == true) {
+       ALYA.send5ButImg(ciko.id, `「 Group Settings Change 」\n\nGroup telah ditutup oleh admin, Sekarang hanya admin yang dapat mengirim pesan !`, `Group Settings Change Message`, wm_fatih, [])
+       } else if (ciko.announce == false) {
+       ALYA.send5ButImg(ciko.id, `「 Group Settings Change 」\n\nGroup telah dibuka oleh admin, Sekarang peserta dapat mengirim pesan !`, `Group Settings Change Message`, wm_fatih, [])
+       } else if (ciko.restrict == true) {
+       ALYA.send5ButImg(ciko.id, `「 Group Settings Change 」\n\nInfo group telah dibatasi, Sekarang hanya admin yang dapat mengedit info group !`, `Group Settings Change Message`, wm_fatih, [])
+       } else if (ciko.restrict == false) {
+       ALYA.send5ButImg(ciko.id, `「 Group Settings Change 」\n\nInfo group telah dibuka, Sekarang peserta dapat mengedit info group !`, `Group Settings Change Message`, wm_fatih, [])
        } else {
-       ALYA.send5ButImg(pea[0].id, `「 Group Settings Change 」\n\nGroup Subject telah diganti menjadi *${pea[0].subject}*`, `Group Settings Change Message`, wm_fatih, [])
+       ALYA.send5ButImg(ciko.id, `「 Group Settings Change 」\n\nGroup Subject telah diganti menjadi *${ciko.subject}*`, `Group Settings Change Message`, wm_fatih, [])
      }
+    }
+    } catch (err){
+    console.log(err)
+    }
     })
 
     ALYA.ev.on('group-participants.update', async (anu) => {
@@ -134,10 +153,14 @@ async function startALYA() {
                 }
 
                 if (anu.action == 'add') {
-                    ALYA.sendMessage(anu.id, { image: { url: ppuser }, contextInfo: { mentionedJid: [num] }, caption: `Welcome To ${metadata.subject} @${num.split("@")[0]}` })
+                    ALYA.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `Welcome To ${metadata.subject} @${num.split("@")[0]}` })
                 } else if (anu.action == 'remove') {
-                    ALYA.sendMessage(anu.id, { image: { url: ppuser }, contextInfo: { mentionedJid: [num] }, caption: `@${num.split("@")[0]} Leaving To ${metadata.subject}` })
-                }
+                    ALYA.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `@${num.split("@")[0]} Leaving To ${metadata.subject}` })
+                } else if (anu.action == 'promote') {
+                    ALYA.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `@${num.split('@')[0]} Promote From ${metadata.subject}` })
+                } else if (anu.action == 'demote') {
+                    ALYA.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `@${num.split('@')[0]} Demote From ${metadata.subject}` })
+              }
             }
         } catch (err) {
             console.log(err)
@@ -221,6 +244,7 @@ async function startALYA() {
             else if (reason === DisconnectReason.loggedOut) { console.log(`Device Logged Out, Please Scan Again And Run.`); ALYA.logout(); }
             else if (reason === DisconnectReason.restartRequired) { console.log("Restart Required, Restarting..."); startALYA(); }
             else if (reason === DisconnectReason.timedOut) { console.log("Connection TimedOut, Reconnecting..."); startALYA(); }
+            else if (reason === DisconnectReason.Multidevicemismatch) { console.log("Multi device mismatch, please scan again"); ALYA.logout(); }
             else ALYA.end(`Unknown DisconnectReason: ${reason}|${connection}`)
         }
         console.log('Connected...', update)
@@ -229,6 +253,52 @@ async function startALYA() {
     ALYA.ev.on('creds.update', saveState)
 
     // Add Other
+
+      /** Resize Image
+      *
+      * @param {Buffer} Buffer (Only Image)
+      * @param {Numeric} Width
+      * @param {Numeric} Height
+      */
+      ALYA.reSize = async (image, width, height) => {
+       let jimp = require('jimp')
+       var oyy = await jimp.read(image);
+       var kiyomasa = await oyy.resize(width, height).getBufferAsync(jimp.MIME_JPEG)
+       return kiyomasa
+      }
+      // Siapa yang cita-citanya pakai resize buat keliatan thumbnailnya
+      
+
+      /**
+      *
+      * @param {*} jid
+      * @param {*} url
+      * @param {*} caption
+      * @param {*} quoted
+      * @param {*} options
+      */
+     ALYA.sendFileUrl = async (jid, url, caption, quoted, options = {}) => {
+      let mime = '';
+      let res = await axios.head(url)
+      mime = res.headers['content-type']
+      if (mime.split("/")[1] === "gif") {
+     return ALYA.sendMessage(jid, { video: await getBuffer(url), caption: caption, gifPlayback: true, ...options}, { quoted: quoted, ...options})
+      }
+      let type = mime.split("/")[0]+"Message"
+      if(mime === "application/pdf"){
+     return ALYA.sendMessage(jid, { document: await getBuffer(url), mimetype: 'application/pdf', caption: caption, ...options}, { quoted: quoted, ...options })
+      }
+      if(mime.split("/")[0] === "image"){
+     return ALYA.sendMessage(jid, { image: await getBuffer(url), caption: caption, ...options}, { quoted: quoted, ...options})
+      }
+      if(mime.split("/")[0] === "video"){
+     return ALYA.sendMessage(jid, { video: await getBuffer(url), caption: caption, mimetype: 'video/mp4', ...options}, { quoted: quoted, ...options })
+      }
+      if(mime.split("/")[0] === "audio"){
+     return ALYA.sendMessage(jid, { audio: await getBuffer(url), caption: caption, mimetype: 'audio/mpeg', ...options}, { quoted: quoted, ...options })
+      }
+      }
+
     /** Send List Messaage
       *
       *@param {*} jid
@@ -279,20 +349,23 @@ async function startALYA() {
      * @param {*} options
      * @returns
      */
-    ALYA.send5ButImg = async (jid , text = '' , footer = '', img, but = [], options = {}) =>{
-        let message = await prepareWAMessageMedia({ image: img }, { upload: ALYA.waUploadToServer })
-        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-        templateMessage: {
-        hydratedTemplate: {
-        imageMessage: message.imageMessage,
-               "hydratedContentText": text,
-               "hydratedFooterText": footer,
-               "hydratedButtons": but
-            }
-            }
-            }), options)
-            ALYA.relayMessage(jid, template.message, { messageId: template.key.id })
+    ALYA.send5ButImg = async (jid , text = '' , footer = '', img, but = [], buff, options = {}) =>{
+    ALYA.sendMessage(jid, { image: img, caption: text, footer: footer, templateButtons: but, ...options })
     }
+
+    /** Send Button 5 Location
+       *
+       * @param {*} jid
+       * @param {*} text
+       * @param {*} footer
+       * @param {*} location
+       * @param [*] button
+       * @param {*} options
+       */
+      ALYA.send5ButLoc = async (jid , text = '' , footer = '', lok, but = [], options = {}) =>{
+      let bb = await ALYA.reSize(lok, 300, 300)
+      ALYA.sendMessage(jid, { location: { jpegThumbnail: bb }, caption: text, footer: footer, templateButtons: but, ...options })
+      }
 
     /** Send Button 5 Video
      *
@@ -304,19 +377,9 @@ async function startALYA() {
      * @param {*} options
      * @returns
      */
-    ALYA.send5ButVid = async (jid , text = '' , footer = '', vid, but = [], options = {}) =>{
-        let message = await prepareWAMessageMedia({ video: vid }, { upload: ALYA.waUploadToServer })
-        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-        templateMessage: {
-        hydratedTemplate: {
-        videoMessage: message.videoMessage,
-               "hydratedContentText": text,
-               "hydratedFooterText": footer,
-               "hydratedButtons": but
-            }
-            }
-            }), options)
-            ALYA.relayMessage(jid, template.message, { messageId: template.key.id })
+    ALYA.send5ButVid = async (jid , text = '' , footer = '', vid, but = [], buff, options = {}) =>{
+    let lol = await ALYA.reSize(buff, 300, 300)
+    hisoka.sendMessage(jid, { video: vid, jpegThumbnail: lol, caption: text, footer: footer, templateButtons: but, ...options })
     }
 
     /** Send Button 5 Gif
@@ -329,19 +392,11 @@ async function startALYA() {
      * @param {*} options
      * @returns
      */
-    ALYA.send5ButGif = async (jid , text = '' , footer = '', gif, but = [], options = {}) =>{
-        let message = await prepareWAMessageMedia({ video: gif, gifPlayback: true }, { upload: ALYA.waUploadToServer })
-        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-        templateMessage: {
-        hydratedTemplate: {
-        videoMessage: message.videoMessage,
-               "hydratedContentText": text,
-               "hydratedFooterText": footer,
-               "hydratedButtons": but
-            }
-            }
-            }), options)
-            ALYA.relayMessage(jid, template.message, { messageId: template.key.id })
+    ALYA.send5ButGif = async (jid , text = '' , footer = '', gif, but = [], buff, options = {}) =>{
+    let ahh = await hisoka.reSize(buf, 300, 150)
+    let a = [1,2]
+    let b = a[Math.floor(Math.random() * a.length)]
+    ALYA.sendMessage(jid, { video: gif, gifPlayback: true, gifAttribution: b, caption: text, footer: footer, jpegThumbnail: ahh, templateButtons: but, ...options })
     }
 
     /**
