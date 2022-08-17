@@ -22,7 +22,6 @@
 * [`BochilGaming`](https://github.com/BochilGaming)
 * [`ariffb25`](https://github.com/ariffb25)
 
-Group Support [here]
-[![Grup WhatsApp](https://chat.whatsapp.com/LIX42RUhLi15MBXhfvrF6K)
-
+Group Support [Here](https://chat.whatsapp.com/G1e0U2lOTVAGKNjyFHjDGP)
+	
 </details>
