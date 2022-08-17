@@ -3,5 +3,5 @@
 </p>
 <h1 align="left">Alya Bot</h1>
 
-<h1 align="left">Group Bot<h1>
+* Group
 [![Grup WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/LIX42RUhLi15MBXhfvrF6K)
