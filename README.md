@@ -14,5 +14,15 @@
 
 </br>
 
-* Group
-[![Grup WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/LIX42RUhLi15MBXhfvrF6K)
+## Thanks To
+* [`@adiwajshing/baileys`](https://github.com/adiwajshing/baileys)
+* [`DikaArdnt`](https://github.com/DikaArdnt)
+* [`Nando`](https://github.com/Nando35)
+* [`Nurutomo`](https://github.com/Nurutomo)
+* [`BochilGaming`](https://github.com/BochilGaming)
+* [`ariffb25`](https://github.com/ariffb25)
+
+Group Support [here]
+[![Grup WhatsApp](https://chat.whatsapp.com/LIX42RUhLi15MBXhfvrF6K)
+
+</details>
