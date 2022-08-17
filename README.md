@@ -23,8 +23,8 @@
 * [`ariffb25`](https://github.com/ariffb25)
 
 ## Social
-Group Support [Here](https://chat.whatsapp.com/G1e0U2lOTVAGKNjyFHjDGP)
-Instagram [Here](https://instagram.com/alya.xzy)
+* Group Support [Here](https://chat.whatsapp.com/G1e0U2lOTVAGKNjyFHjDGP)
+* Instagram [Here](https://instagram.com/alya.xzy)
 
 	
 </details>
