@@ -27,6 +27,7 @@
 ## Thanks To
 * [`@adiwajshing/baileys`](https://github.com/adiwajshing/baileys)
 * [`DikaArdnt`](https://github.com/DikaArdnt)
+* [`Fatih A`](https://github.com/FatihArridho)
 * [`Nando`](https://github.com/Nando35)
 * [`Nurutomo`](https://github.com/Nurutomo)
 * [`BochilGaming`](https://github.com/BochilGaming)
