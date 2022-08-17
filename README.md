@@ -3,7 +3,7 @@
 </p>
 <h1 align="left">Alya Bot</h1>
 
-> Ubah nomor owner, nama bot, nama session, dll di [`config.js`]
+> Ubah nomor owner, nama bot, nama session, dll di [`config.js`](https://github.com/alya-tok/bot-alya/blob/master/config.js)
 
 </br>
 
