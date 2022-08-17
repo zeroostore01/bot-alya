@@ -14,12 +14,12 @@
 
 </br>
 
-<!-- Installation -->
+<!-- Cara Install -->
 <b><details><summary>Heroku Deployment</summary></b>  
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 	
-<b>Requirements:</b>
+<b>Install Buildpacknya:</b>
 * NodeJS buildpack
 * FFmpeg buildpack https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git
 </details>
