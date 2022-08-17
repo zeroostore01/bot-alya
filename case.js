@@ -2099,33 +2099,25 @@ break
 
 //────────────────────[ DOWNLOADER ]────────────────────
 
-            case 'tiktok': {
-            if (!text) throw 'Masukkan Query Link!'
-            m.reply(mess.wait)
-            hx.ttdownloader(q).then( data => {
-            ALYA.sendMessage(m.chat, {
-            video: { url: data.wm },
-            caption: `Kamu bisa mengubahnya menjadi Vidio Tanpa Watermark atau Audio, pencet tombol dibawah untuk mengubahnya!`,
-            buttons: [{buttonId: `${prefix}ttnowm ${args[0]} ${m.sender}`, buttonText: { displayText: "Tiktok Nowm" }, type: 1 }],
-            footer: "Untuk Mengubah Ke Audio Gunakan Manual #tiktokaudio [link]"
-            }, { quoted: m })
-            })
-            }
+            case 'tiktok': case 'tt': case 'tiktoknowm':{
+            if (!q) throw 'Masukkan Query Link!'
+            m.reply(mess.wait)
+            bochil.tiktokdlv3(q).then( data => {
+            ALYA.sendMessage(m.chat, {
+            video: { url: data.video.no_watermark },
+            caption: `Kamu bisa mengubahnya menjadi Audio, pencet tombol dibawah untuk mengubahnya!`,
+            buttons: [{buttonId: `${prefix}ttaudio ${q} ${m.sender}`, buttonText: { displayText: "Audio" }, type: 1 }],
+            footer: "Untuk Mengubah Ke Audio Gunakan Manual #tiktokaudio [link]"
+            }, { quoted: m })
+            })
+            }
             break
 
-            case 'ttnowm':
-            if (!text) throw 'Masukkan Query Link!'
+            case 'ttaudio': case 'tiktokaudio':
+            if (!q) throw 'Masukkan Query Link!'
             m.reply(mess.wait)
-            hx.ttdownloader(q).then( data => {
-            ALYA.sendMessage(m.chat, { video: { url: data.nowm }, mimetype: 'video/mp4' }, { quoted: m })
-            })
-	        break
-
-            case 'ttaudio':
-            if (!text) throw 'Masukkan Query Link!'
-            m.reply(mess.wait)
-            hx.ttdownloader(q).then( data => {
-            ALYA.sendMessage(m.chat, { audio: { url: data.nowm }, mimetype: 'audio/mp4' }, { quoted: m })
+            bochil.tiktokdlv3(q).then( data => {
+            ALYA.sendMessage(m.chat, { audio: { url: data.video.no_watermark }, mimetype: 'audio/mp4' }, { quoted: m })
             })
 	        break
 
@@ -2180,18 +2172,21 @@ break
                 if (!text) throw 'Masukkan Query Link!'
                 if (!isUrl(args[0]) && !args[0].includes('facebook.com')) throw 'Link yang kamu berikan tidak.valid'
                 m.reply(mess.wait)
-                xa.Facebook(`${text}`).then(async (data) => {
-                    let txt = `*----「 FACEBOOK MP4 」----*\n\n`
-                    txt += `*• Title :* ${data.title}\n`
-                    txt += `*• Quality :* ${data.medias[1].quality}\n`
-                    txt += `*• Type :* ${data.medias[1].extension}\n`
-                    txt += `*• Size :* ${data.medias[1].formattedSize}\n`
-                    txt += `*• Url Source :* ${data.url}\n\n`
-                    txt += `*Halo Kak ${pushname} Bot Telah Mendapatkan Title Tersebut Silahkan Tunggu Beberapa Menit, Jangan Lupa Donasi Ya Kak*`
-                ALYA.sendMessage(m.chat, { video: { url: data.medias[1].url }, caption: `${txt}`}, { quoted: m })
-                }).catch((err) => {
+                try {
+                var data= await bochil.savefrom(`${text}`)
+                for(let i of data.url){    
+                ALYA.sendMessage(m.chat, { video: { url: i.url }, caption: `Done`}, { quoted: m })
+                }
+                } catch {
+                try {
+                var daa = await bochil.facebookdl(`${text}`)
+                for(let i of daa.result){    
+                ALYA.sendMessage(m.chat, { video: { url: i.url }, caption: `Done`}, { quoted: m })
+                }
+                } catch {
                     m.reply(`*Gagal Saat mendownload media dan mengirm video*`)
-                })
+                }
+              }
             }
             break
 
