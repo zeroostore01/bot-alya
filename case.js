@@ -647,20 +647,19 @@ Jika sudah dipahami rules-nya, silakan ketik *${prefix}menu* untuk memulai!`)
 break
             case 'sc':  case 'sourcecode': {
 	        anu = `
-◦ Script : https://github.com/Nando35/ALYAM
+◦ Script : https://github.com/siegrin
 ◦ Script ori : https://github.com/DikaArdnt/ALYA-Morou
 
 Jangan lupa kasih bintang.
-◦ Donate : 628125284895 (Dana / gopay)
-◦ Saweria : https://saweria.co/Nando35
-◦ Paypal : https://www.paypal.me/Rifando35
+◦ Donate : 085784914140 (Dana)
+◦ Allqris : https://tinyurl.com/2el4odkel
 
-Dont Forget Donate
+G Donasi G Kawan
 `
 	                let btn = [{
                                 urlButton: {
-                                    displayText: 'Instagram',
-                                    url: 'https://instagram.com/naando.jpeg'
+                                    displayText: 'Group Bot',
+                                    url: 'https://chat.whatsapp.com/E8IwFUibPjkDgilRKw6JBg'
                                 }
                             }]
                         ALYA.send5ButImg(m.chat, anu, botname, global.sc, btn)
@@ -684,8 +683,8 @@ Alya
 `
 	                let btn = [{
                                 urlButton: {
-                                    displayText: 'Instagram',
-                                    url: 'https://instagram.com/naando.jpeg'
+                                    displayText: 'Group Bot',
+                                    url: 'https://chat.whatsapp.com/E8IwFUibPjkDgilRKw6JBg'
                                 }
                             }]
                         ALYA.send5ButImg(m.chat, anu, botname, global.tq, btn)
